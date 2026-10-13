@@ -1,6 +1,6 @@
 # fhir-api-qa
 
-A QA portfolio project targeting the public HAPI FHIR R4 test server — an open-source implementation of HL7 FHIR, the interoperability standard behind modern healthcare data exchange. This project demonstrates backend API quality engineering for healthcare systems: server conformance checks, resource lifecycle testing, and negative-case validation, configured to run in CI on pushes and pull requests to `main`.
+A healthcare API needs to preserve the data it accepts and respond clearly when a request is invalid. This project tests that behavior against the public HAPI FHIR R4 server: capability checks, Patient lifecycle integrity, isolated search, and structured errors, with pytest and retained CI reports.
 
 ![CI Status](https://github.com/jensenmd/fhir-api-qa/actions/workflows/ci.yml/badge.svg)
 
@@ -21,20 +21,20 @@ Built by **Michael D. Jensen** — Senior QA Engineer with 15+ years of enterpri
 | Negative Cases | pytest + requests | Malformed input rejected with `OperationOutcome`, never 500s |
 | CI/CD Pipeline | GitHub Actions | Full suite on main pushes/PRs, weekly schedule, and manual dispatch |
 
-This is a backend-only project by design. FHIR quality lives at the API and data layers — selected field integrity, search semantics, and error contracts — so every test targets the layer where healthcare interoperability actually breaks.
+The scope is deliberately at the API and data layers: selected field integrity, search behavior, and error contracts. It provides focused evidence about those behaviors; broader clinical workflows and production interoperability need additional validation.
 
 ---
 
 ## Why HAPI FHIR?
 
-[HAPI FHIR](https://hapi.fhir.org/) is the open-source reference implementation of HL7 FHIR, maintained by Smile CDR and used across the healthcare industry. Its public test server provides:
+[HAPI FHIR](https://hapi.fhir.org/) is an open-source implementation of HL7 FHIR, maintained by Smile CDR and used across the healthcare industry. Its public test server provides:
 
 - A real FHIR R4 API with the full resource lifecycle (create, read, update, delete, search)
 - A CapabilityStatement endpoint declaring exactly what the server supports
 - Strict validation behavior — malformed resources are rejected with structured `OperationOutcome` errors
 - Enough realism to write meaningful tests without requiring access to a production EHR
 
-It's the closest thing the QA community has to a standard practice target for healthcare interoperability testing — it behaves like a real clinical data server, including the quirks of shared public infrastructure.
+The public server makes these checks reproducible without access to a production EHR, while also exposing the latency and indexing behavior of shared infrastructure.
 
 ---
 
@@ -114,7 +114,7 @@ GitHub Actions is configured to run on pushes and pull requests to `main`, plus 
 - **Reports** — JUnit XML and a self-contained HTML report are uploaded with `if: always()` and retained for 14 days, including failing runs that reached pytest.
 - **Triggers** — pushes/PRs to `main`, Monday 09:00 UTC, and manual dispatch. The job has a 15-minute timeout; automatic concurrency cancellation is disabled to allow teardown.
 
-> **Note on CI stability:** The public HAPI FHIR server is shared infrastructure with variable latency. Timeouts are set generously and capability smoke tests fail fast, and request errors include diagnostics for triage — the same triage discipline as any external-dependency pipeline: a failure still requires investigation; the suite does not automatically classify its cause or turn it into a pass.
+> **CI triage:** Smoke checks stop the suite when the server is unavailable or incompatible. Other failures retain response diagnostics and reports for investigation; the suite does not automatically classify their cause or turn them into passes.
 
 ---
 
@@ -142,19 +142,19 @@ The checks cover selected fields and server behavior, not full FHIR schema valid
 
 ## QA Portfolio Quick Reference
 
-This project is part of a broader QA portfolio demonstrating complementary quality-engineering skills.
+See [Michael D. Jensen’s QA portfolio](https://github.com/jensenmd) for the complete project overview.
 
-| Project | Focus |
-|---|---|
-| [android-appium-wdio-poc](https://github.com/jensenmd/android-appium-wdio-poc) | Native Android UI automation proof of concept using Appium, WebdriverIO, TypeScript, and UiAutomator2 |
-| [mapmyrun-quality-investigation](https://github.com/jensenmd/mapmyrun-quality-investigation) | Black-box mobile and GPS quality investigation using field evidence and bounded conclusions |
-| [restful-booker-qa](https://github.com/jensenmd/restful-booker-qa) | Layered API and UI automation using Postman, Newman, Playwright, and GitHub Actions |
-| [pharmacy-spend-etl-qa](https://github.com/jensenmd/pharmacy-spend-etl-qa) | ETL pipeline and SQL-driven data-integrity validation modeled after healthcare analytics work |
-| [qa-automation-showcase](https://github.com/jensenmd/qa-automation-showcase) | REST API testing, data validation, and CI/CD-integrated automation |
-| [ai-qa-framework](https://github.com/jensenmd/ai-qa-framework) | Human-reviewed AI-assisted test generation with structured cases and pytest execution |
-| [claude-code-qa-sessions](https://github.com/jensenmd/claude-code-qa-sessions) | Agentic analysis of existing QA repositories with human review and targeted implementation |
-| [agentqa-orchestrator](https://github.com/jensenmd/agentqa-orchestrator) | Structured agentic code auditing using Python, Pydantic, Gemini, and JSON |
-| [fhir-api-qa](https://github.com/jensenmd/fhir-api-qa) **(this repository)** | FHIR R4 API testing with pytest against the public HAPI FHIR server — CapabilityStatement checks, Patient CRUD, negative cases, GitHub Actions CI |
+| Project | Purpose and Approach |
+| --- | --- |
+| [fhir-api-qa](https://github.com/jensenmd/fhir-api-qa) **(this repository)** | Checks whether a healthcare API preserves Patient data through its lifecycle, with isolated FHIR tests and useful CI failure evidence. |
+| [pharmacy-spend-etl-qa](https://github.com/jensenmd/pharmacy-spend-etl-qa) | Checks that pharmacy spend data survives the trip from source files to analytics tables, using SQL reconciliation on a synthetic pipeline. |
+| [restful-booker-qa](https://github.com/jensenmd/restful-booker-qa) | Tests booking behavior at both API and browser layers, combining Postman/Newman and Playwright for repeatable regression feedback. |
+| [qa-automation-showcase](https://github.com/jensenmd/qa-automation-showcase) | Examines API behavior and the quality of returned data together, using pytest, Postman, and Python validation. |
+| [android-appium-wdio-poc](https://github.com/jensenmd/android-appium-wdio-poc) | Builds a focused baseline for Android UI checks, exercising Settings navigation on a local emulator with Appium and WebdriverIO. |
+| [mapmyrun-quality-investigation](https://github.com/jensenmd/mapmyrun-quality-investigation) | Investigates how workout tracking affects data integrity and user trust, using mobile field experiments and separating observations from explanations. |
+| [ai-qa-framework](https://github.com/jensenmd/ai-qa-framework) | Explores how AI can help develop useful API test coverage while keeping a QA engineer responsible for review and pytest execution. |
+| [claude-code-qa-sessions](https://github.com/jensenmd/claude-code-qa-sessions) | Shows how human QA judgment guides Claude Code from finding coverage gaps to making targeted, reviewed test improvements. |
+| [agentqa-orchestrator](https://github.com/jensenmd/agentqa-orchestrator) | Explores inspectable AI code reviews, using Gemini and Pydantic-defined response schemas to produce structured JSON audit artifacts. |
 
 ---
 
@@ -166,7 +166,3 @@ This project is part of a broader QA portfolio demonstrating complementary quali
 Current hands-on work includes Python/pytest automation, Playwright UI testing, and CI/CD-integrated quality practices.
 
 🔗 [LinkedIn](https://www.linkedin.com/in/michaeljensen-qa/) | 🐙 [GitHub Profile](https://github.com/jensenmd) | 📧 jensen.md@gmail.com
-
-## Portfolio Card Source
-
-`assets/project-card.svg` reconstructs the 1200 × 630 layout of the reference `restful-booker-qa-project-card.png`. No editable source/template was present in the three reference repositories. The FHIR card preserves the reference geometry, dark background, blue/green/purple accents, badges, footer, and three-stage diagram, with FHIR-specific labels. `assets/render_card.py` renders the SVG to the README PNG using CairoSVG (`python -m pip install -r assets/requirements.txt`, then `python assets/render_card.py`). Rendering requires native Cairo (Windows users may need its DLLs on PATH). The SVG uses Arial; exact font rendering depends on the installed fonts.
