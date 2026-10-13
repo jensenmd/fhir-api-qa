@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+<title id="title">FHIR API QA portfolio project</title>
+<desc id="desc">FHIR R4 capability, Patient lifecycle, and CI checks with retained test reports.</desc>
+<defs>
+ <linearGradient id="bg" x2="1" y2="1"><stop stop-color="#080d14"/><stop offset="1" stop-color="#0e1520"/></linearGradient>
+ <linearGradient id="accent"><stop stop-color="#2f85ff"/><stop offset=".5" stop-color="#35bb4c"/><stop offset="1" stop-color="#a574f5"/></linearGradient>
+</defs>
+<rect width="1200" height="630" rx="28" fill="url(#bg)"/>
+<rect width="1200" height="7" fill="url(#accent)"/>
+<g stroke="#1b2530" stroke-width="1"><path d="M64 80H1136M64 550H1136M720 80V550"/></g>
+<g font-family="Arial, sans-serif">
+ <text x="72" y="112" fill="#66a6ff" font-size="18" font-weight="700" letter-spacing="2">HEALTHCARE API QA / FHIR R4</text>
+ <text x="72" y="204" fill="#f3f6fb" font-size="48" font-weight="700">fhir-api-qa</text>
+ <rect x="72" y="264" width="580" height="4" rx="2" fill="url(#accent)"/>
+ <g fill="#c3ccd8" font-size="24"><text x="72" y="316">FHIR conformance and Patient lifecycle</text><text x="72" y="349">with repeatable CI feedback</text></g>
+ <rect x="72" y="389" width="174" height="45" rx="23" fill="#13253e" stroke="#2f85ff"/>
+ <rect x="259" y="389" width="123" height="45" rx="23" fill="#142b21" stroke="#35bb4c"/>
+ <rect x="395" y="389" width="157" height="45" rx="23" fill="#251e39" stroke="#a574f5"/>
+ <g font-size="16" font-weight="700" text-anchor="middle"><text x="159" y="417" fill="#8ebeff">pytest + requests</text><text x="320.5" y="417" fill="#7de993">HAPI FHIR</text><text x="473.5" y="417" fill="#cab0ff">GitHub Actions</text></g>
+ <rect x="72" y="493" width="16" height="16" rx="4" fill="#35bb4c"/>
+ <g font-size="16" fill="#a6b8ca"><text x="100" y="507">Portfolio automation project</text><text x="347" y="507" fill="#5d7082">•</text><text x="366" y="507">Public test server</text></g>
+ <text x="72" y="582" fill="#7089a3" font-size="15" letter-spacing=".5">github.com/jensenmd/fhir-api-qa</text>
+ <rect x="842" y="105" width="224" height="410" rx="32" fill="#0a111b" stroke="#33455a" stroke-width="3"/>
+ <rect x="859" y="144" width="190" height="325" rx="12" fill="#0e1928" stroke="#213247"/>
+ <path d="M929 123H979" stroke="#33455a" stroke-width="6" stroke-linecap="round"/>
+ <circle cx="954" cy="491" r="8" fill="none" stroke="#33455a" stroke-width="2"/>
+ <path d="M954 232V274M954 322V364" stroke="#52637b" stroke-width="3" stroke-dasharray="7 7"/>
+ <g stroke-linecap="round" stroke-width="4"><path d="M887 209H1021" stroke="#2f85ff"/><path d="M887 299H1021" stroke="#35bb4c"/><path d="M887 389H1021" stroke="#a574f5"/></g>
+ <g stroke-width="3"><circle cx="954" cy="209" r="30" fill="#2f85ff" opacity=".1"/><circle cx="954" cy="209" r="24" fill="#11233d" stroke="#2f85ff"/><circle cx="954" cy="299" r="30" fill="#35bb4c" opacity=".1"/><circle cx="954" cy="299" r="24" fill="#142b21" stroke="#35bb4c"/><circle cx="954" cy="389" r="30" fill="#a574f5" opacity=".1"/><circle cx="954" cy="389" r="24" fill="#251e39" stroke="#a574f5"/></g>
+ <g font-size="16" font-weight="700" text-anchor="middle"><text x="954" y="215" fill="#8ebeff">1</text><text x="954" y="305" fill="#7de993">2</text><text x="954" y="395" fill="#cab0ff">3</text></g>
+ <g font-size="12" font-weight="700" text-anchor="middle" fill="#90aac6"><text x="954" y="250">R4</text><text x="954" y="340">CRUD</text><text x="954" y="430">CI</text></g>
+ <path d="M1066 387H1088Q1123 387 1123 425V437" fill="none" stroke="#35bb4c" stroke-width="3"/>
+ <circle cx="1123" cy="448" r="7" fill="#35bb4c"/>
+ <rect x="1013" y="474" width="156" height="72" rx="14" fill="#101f1b" stroke="#287d45"/>
+ <text x="1091" y="503" text-anchor="middle" fill="#7de993" font-size="12" font-weight="700">TEST EVIDENCE</text>
+ <text x="1091" y="526" text-anchor="middle" fill="#a2b8c2" font-size="11">reports + artifacts</text>
+</g>
+</svg>

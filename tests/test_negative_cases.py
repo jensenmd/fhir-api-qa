@@ -1,20 +1,22 @@
-"""Negative cases: malformed input must produce OperationOutcome errors,
-not 500s or silent acceptance.
-"""
+"""Malformed input must yield structured errors; accepted data is cleaned up."""
+import uuid
 
 
-def test_create_patient_with_invalid_birthdate_rejected(client):
-    resp = client.create({"resourceType": "Patient", "birthDate": "not-a-date"})
-    assert resp.status_code in (400, 422), f"got {resp.status_code}"
-    body = resp.json()
+def assert_outcome(response, statuses):
+    assert response.status_code in statuses, f"{response.status_code} {response.text[:300]}"
+    body = response.json()
     assert body["resourceType"] == "OperationOutcome"
+    assert any(issue.get("severity") in ("error", "fatal") for issue in body.get("issue", []))
+
+
+def test_create_patient_with_invalid_birthdate_rejected(create_patient, unique_patient):
+    unique_patient["birthDate"] = "not-a-date"
+    assert_outcome(create_patient(unique_patient), (400, 422))
 
 
 def test_read_nonexistent_patient_returns_404(client):
-    resp = client.read("Patient", "00000000-0000-0000-0000-000000000000")
-    assert resp.status_code == 404, f"got {resp.status_code}"
+    assert_outcome(client.read("Patient", str(uuid.uuid4())), (404,))
 
 
 def test_create_with_unknown_resource_type_rejected(client):
-    resp = client.create({"resourceType": "NotARealResource"})
-    assert resp.status_code in (400, 404), f"got {resp.status_code}"
+    assert_outcome(client.create({"resourceType": "NotARealResource"}), (400, 404))

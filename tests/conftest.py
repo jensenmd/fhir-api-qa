@@ -1,26 +1,26 @@
-"""Shared fixtures: one client per session, unique test data per test."""
+"""Unique synthetic Patients with cleanup registered before test assertions."""
+import os
 import uuid
 
 import pytest
 
 from utils.fhir_client import FhirClient
+from utils.patient_cleanup import PatientCleanup
 
 
 @pytest.fixture(scope="session")
 def client():
-    return FhirClient()
+    instance = FhirClient(base_url=os.environ.get("FHIR_BASE_URL", "https://hapi.fhir.org/baseR4"))
+    yield instance
+    instance.session.close()
 
 
 @pytest.fixture
 def unique_patient():
-    """A Patient payload with a unique identifier so tests never collide,
-    even against the shared public server."""
-    tag = uuid.uuid4().hex[:8]
+    tag = uuid.uuid4().hex
     return {
         "resourceType": "Patient",
-        "identifier": [
-            {"system": "http://qa-demo.example/fhir-api-qa", "value": f"test-{tag}"}
-        ],
+        "identifier": [{"system": "http://qa-demo.example/fhir-api-qa", "value": f"test-{tag}"}],
         "name": [{"family": "QADemo", "given": [f"Test{tag}"]}],
         "gender": "unknown",
         "birthDate": "1990-01-01",
@@ -28,10 +28,17 @@ def unique_patient():
 
 
 @pytest.fixture
-def created_patient(client, unique_patient):
-    """Creates a Patient, yields its id, then deletes it (best effort)."""
-    resp = client.create(unique_patient)
-    assert resp.status_code == 201, f"setup failed: {resp.status_code} {resp.text[:300]}"
-    patient_id = resp.json()["id"]
-    yield patient_id
-    client.delete("Patient", patient_id)
+def create_patient(client):
+    cleanup = PatientCleanup(client)
+    yield cleanup.create
+    cleanup.finish()
+
+
+@pytest.fixture
+def created_patient(create_patient, unique_patient):
+    response = create_patient(unique_patient)
+    assert response.status_code == 201, f"setup failed: {response.status_code} {response.text[:300]}"
+    body = response.json()
+    assert body["resourceType"] == "Patient"
+    assert body.get("id")
+    return body["id"]

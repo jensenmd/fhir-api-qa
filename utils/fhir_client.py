@@ -1,7 +1,6 @@
 """Thin wrapper around a FHIR R4 server.
 
-Defaults to the public HAPI FHIR test server. Every test creates its own
-data and cleans up after itself, since the public server is shared.
+Defaults to the public HAPI FHIR test server. Lifecycle tests use unique synthetic data and fixture cleanup.
 """
 import requests
 
@@ -17,6 +16,7 @@ class FhirClient:
             {
                 "Accept": "application/fhir+json",
                 "Content-Type": "application/fhir+json",
+                "Prefer": "return=representation",
             }
         )
 
